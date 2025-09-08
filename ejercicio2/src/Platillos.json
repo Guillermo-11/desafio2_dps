@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1",
+    "nombre": "Pupusas",
+    "descripcion": "Tortillas gruesas de maíz o arroz rellenas de queso, frijoles, chicharrón u otros ingredientes.",
+    "foto": "https://cookingwithkids.org/wp-content/uploads/2022/12/Pupusas_750x750.jpg",
+    "ingredientes": ["Masa de maíz o arroz", "Queso", "Frijoles", "Chicharrón", "Aceite"],
+    "region": "La Paz (Olocuilta)",
+    "precio": 1.00,
+    "categoria": "Plato fuerte"
+  },
+  {
+    "id": "2",
+    "nombre": "Empanadas",
+    "descripcion": "Dulce típico hecho de plátano maduro relleno de frijoles o leche, frito y espolvoreado con azúcar.",
+    "foto": "https://www.recetassalvador.com/base/stock/Recipe/empanadas-salvadorenas/empanadas-salvadorenas_web.jpg.webp",
+    "ingredientes": ["Plátano maduro", "Frijoles molidos", "Leche", "Azúcar", "Aceite"],
+    "region": "San Salvador y La Libertad",
+    "precio": 0.75,
+    "categoria": "Postre"
+  },
+  {
+    "id": "3",
+    "nombre": "Yuca Frita con Chicharrón",
+    "descripcion": "Yuca frita servida con chicharrón, curtido y salsa de tomate.",
+    "foto": "https://bucket-vidasana.s3.us-west-2.amazonaws.com/wp-content/uploads/2019/09/yuca-frita-chicharr%C3%B3n.jpg",
+    "ingredientes": ["Yuca", "Chicharrón", "Curtido", "Salsa de tomate", "Aceite"],
+    "region": "Cuscatlán y San Vicente",
+    "precio": 2.50,
+    "categoria": "Plato fuerte"
+  },
+  {
+    "id": "4",
+    "nombre": "Tamales de Elote",
+    "descripcion": "Tamales suaves elaborados con maíz tierno, envueltos en hojas de maíz y cocidos al vapor.",
+    "foto": "https://www.maricruzavalos.com/wp-content/uploads/2019/08/tamales-de-elote-recipe.jpg",
+    "ingredientes": ["Maíz tierno", "Crema", "Queso", "Azúcar", "Sal"],
+    "region": "Santa Ana y Ahuachapán",
+    "precio": 1.25,
+    "categoria": "Plato fuerte"
+  },
+  {
+    "id": "5",
+    "nombre": "Nuegados con Miel",
+    "descripcion": "Bolitas fritas de masa de yuca acompañadas de miel de panela.",
+    "foto": "https://www.tipicosmargoth.com/wp-content/uploads/2020/05/NU%C3%89GADO-DE-YUCA-TIPICOS-MARGOTH.jpg",
+    "ingredientes": ["Yuca", "Harina", "Huevo", "Aceite", "Miel de panela"],
+    "region": "Sonsonate",
+    "precio": 1.50,
+    "categoria": "Postre"
+  }
+]
