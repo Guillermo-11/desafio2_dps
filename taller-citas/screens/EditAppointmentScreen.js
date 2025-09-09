@@ -15,30 +15,28 @@ export default function EditAppointmentScreen({ route, navigation }) {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [appointments, setAppointments] = useState([]);
 
-useEffect(() => {
-  const loadAppointment = async () => {
-    let storedAppointments = await AsyncStorage.getItem('appointments');
-    storedAppointments = storedAppointments ? JSON.parse(storedAppointments) : [];
-    setAppointments(storedAppointments);
+  useEffect(() => {
+    const loadAppointment = async () => {
+      let storedAppointments = await AsyncStorage.getItem('appointments');
+      storedAppointments = storedAppointments ? JSON.parse(storedAppointments) : [];
+      setAppointments(storedAppointments);
 
-    const appointment = storedAppointments.find(a => a.id === appointmentId);
-    if (appointment) {
-      setClientName(appointment.clientName || '');
-      setVehicle(appointment.vehicle || '');
-      setDescription(appointment.description || '');
+      const appointment = storedAppointments.find(a => a.id === appointmentId);
+      if (appointment) {
+        setClientName(appointment.clientName || '');
+        setVehicle(appointment.vehicle || '');
+        setDescription(appointment.description || '');
 
-      // Separar correctamente fecha y hora
-      const [hours, minutes] = appointment.time.split(':');
-      const [year, month, day] = appointment.date.split('-').map(Number);
-      const appointmentDateTime = new Date(year, month - 1, day, parseInt(hours), parseInt(minutes));
+        const [hours, minutes] = appointment.time.split(':');
+        const [year, month, day] = appointment.date.split('-').map(Number);
+        const appointmentDateTime = new Date(year, month - 1, day, parseInt(hours), parseInt(minutes));
 
-      setDate(appointmentDateTime);
-      setTime(appointmentDateTime);
-    }
-  };
-  loadAppointment();
-}, []);
-
+        setDate(appointmentDateTime);
+        setTime(appointmentDateTime);
+      }
+    };
+    loadAppointment();
+  }, []);
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -58,6 +56,11 @@ useEffect(() => {
       return;
     }
 
+    if (!vehicle.trim()) {
+      Alert.alert('Error', 'Debe ingresar el modelo del vehículo.');
+      return;
+    }
+
     const appointmentDateTime = new Date(
       date.getFullYear(),
       date.getMonth(),
@@ -71,7 +74,7 @@ useEffect(() => {
       return;
     }
 
-    // Revisar duplicados (excepto la cita que estamos editando)
+    // Revisar duplicados
     const duplicate = appointments.find(
       (a) =>
         a.id !== appointmentId &&
@@ -84,7 +87,6 @@ useEffect(() => {
       return;
     }
 
-    // Actualizar cita
     const updatedAppointments = appointments.map(a => {
       if (a.id === appointmentId) {
         return {
@@ -100,6 +102,7 @@ useEffect(() => {
     });
 
     await AsyncStorage.setItem('appointments', JSON.stringify(updatedAppointments));
+    Alert.alert('Éxito', 'Cita actualizada correctamente.');
     navigation.goBack();
   };
 
@@ -124,7 +127,7 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Nomffbre del Cliente:</Text>
+      <Text style={styles.label}>Nombre del Cliente:</Text>
       <TextInput style={styles.input} value={clientName} onChangeText={setClientName} />
 
       <Text style={styles.label}>Modelo del Vehículo:</Text>
@@ -161,69 +164,19 @@ useEffect(() => {
         multiline
       />
 
-      <Button title="Guardar Cambios" onPress={handleSave} />
-      <View style={{ marginTop: 10 }}>
-        <Button title="Eliminar Cita" color="red" onPress={handleDelete} />
+      <View style={{ marginTop: 20 }}>
+        <Button title="Guardar Cambios" color="#1e88e5" onPress={handleSave} />
+      </View>
+
+      <View style={{ marginTop: 15 }}>
+        <Button title="Eliminar Cita" color="#e53935" onPress={handleDelete} />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  saveButton: {
-    backgroundColor: '#43a047', // verde elegante
-    padding: 15,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 25,
-    shadowColor: '#43a047',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 5,
-    elevation: 4,
-  },
-  saveButtonText: {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 16,
-  },
-  deleteButton: {
-    backgroundColor: '#e53935', // rojo intenso
-    padding: 15,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 15,
-    shadowColor: '#e53935',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 5,
-    elevation: 4,
-  },
-  deleteButtonText: {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 10,
-    backgroundColor: '#fff',
-    fontSize: 14,
-    color: '#333',
-  },
-  label: {
-    fontWeight: '600',
-    fontSize: 14,
-    color: '#555',
-    marginTop: 15,
-  },
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f0f2f5',
-  },
+  container: { flex: 1, padding: 20, backgroundColor: '#f0f2f5' },
+  label: { fontWeight: 'bold', fontSize: 14, color: '#333', marginTop: 15 },
+  input: { borderWidth: 1, borderColor: '#ccc', padding: 10, borderRadius: 8, marginTop: 5, backgroundColor: '#fff', fontSize: 14 },
 });
-

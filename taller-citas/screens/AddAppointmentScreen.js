@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -32,6 +32,11 @@ export default function AddAppointmentScreen({ navigation }) {
       return;
     }
 
+    if (!vehicle.trim()) {
+      Alert.alert('Error', 'Debe ingresar el modelo del vehículo.');
+      return;
+    }
+
     const appointmentDateTime = new Date(
       date.getFullYear(),
       date.getMonth(),
@@ -48,9 +53,14 @@ export default function AddAppointmentScreen({ navigation }) {
     // Revisar duplicados
     let storedAppointments = await AsyncStorage.getItem('appointments');
     storedAppointments = storedAppointments ? JSON.parse(storedAppointments) : [];
+
     const duplicate = storedAppointments.find(
-      (a) => a.date === date.toISOString().split('T')[0] && a.time === time.toTimeString().slice(0,5) && a.vehicle === vehicle
+      a =>
+        a.date === date.toISOString().split('T')[0] &&
+        a.time === time.toTimeString().slice(0, 5) &&
+        a.vehicle === vehicle
     );
+
     if (duplicate) {
       Alert.alert('Error', 'Ya existe una cita para este vehículo en la misma fecha y hora.');
       return;
@@ -62,15 +72,14 @@ export default function AddAppointmentScreen({ navigation }) {
       clientName,
       vehicle,
       date: date.toISOString().split('T')[0],
-      time: time.toTimeString().slice(0,5),
+      time: time.toTimeString().slice(0, 5),
       description
     };
 
-    // Guardar en AsyncStorage
     storedAppointments.push(newAppointment);
     await AsyncStorage.setItem('appointments', JSON.stringify(storedAppointments));
 
-    // Volver a HomeScreen
+    Alert.alert('Éxito', 'Cita guardada correctamente.');
     navigation.goBack();
   };
 
@@ -95,7 +104,7 @@ export default function AddAppointmentScreen({ navigation }) {
       )}
 
       <Text style={styles.label}>Hora:</Text>
-      <Button title={time.toTimeString().slice(0,5)} onPress={() => setShowTimePicker(true)} />
+      <Button title={time.toTimeString().slice(0, 5)} onPress={() => setShowTimePicker(true)} />
       {showTimePicker && (
         <DateTimePicker
           value={time}
@@ -107,13 +116,15 @@ export default function AddAppointmentScreen({ navigation }) {
 
       <Text style={styles.label}>Descripción (opcional):</Text>
       <TextInput
-        style={[styles.input, {height: 80}]}
+        style={[styles.input, { height: 80 }]}
         value={description}
         onChangeText={setDescription}
         multiline
       />
 
-      <Button title="Guardar Cita" onPress={handleSave} />
+      <View style={styles.saveButton}>
+        <Button title="Guardar Cita" color="#1e88e5" onPress={handleSave} />
+      </View>
     </View>
   );
 }
@@ -121,17 +132,25 @@ export default function AddAppointmentScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20
+    padding: 20,
+    backgroundColor: '#f0f2f5'
   },
   label: {
     fontWeight: 'bold',
-    marginTop: 10
+    marginTop: 15,
+    color: '#333'
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
     marginTop: 5,
-    borderRadius: 5
+    borderRadius: 8,
+    backgroundColor: '#fff'
+  },
+  saveButton: {
+    marginTop: 25,
+    borderRadius: 8,
+    overflow: 'hidden'
   }
 });
